@@ -18,5 +18,6 @@ public class ExpenseSplitEntity {
     @JoinColumn(name = "user_id")
     public UserEntity user;
 
-    public double amountOwed;
+    // Use wrapper to allow null checks and avoid primitive null comparison errors
+    public Double amountOwed;
 }
