@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 const API_BASE = import.meta?.env?.VITE_API_URL || 'http://localhost:8080';
+const USERS_ROUTE = import.meta?.env?.VITE_USERS_ROUTE || '#/users';
+const ADMIN_USERS_ROUTE = import.meta?.env?.VITE_ADMIN_USERS_ROUTE || '#/admin/users';
 
 export default function GroupDetail({ groupId }) {
   const [group, setGroup] = useState(null);
@@ -270,26 +272,35 @@ export default function GroupDetail({ groupId }) {
     }
   };
 
+  const goBackToUsers = () => {
+    if (typeof window !== 'undefined') {
+      window.location.hash = '#/admin';
+    }
+  };
+
   return (
     <section className="panel card">
-      <div className="section-title">
-        {!editingName ? (
-          <>
-            <h2>{group?.name || 'Group'}</h2>
-            <button className="btn" onClick={() => setEditingName(true)}>Edit name</button>
-          </>
-        ) : (
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            <input className="input" value={newName} onChange={e => setNewName(e.target.value)} />
-            <button className="btn primary" onClick={saveName} disabled={!newName}>Save</button>
-            <button className="btn" onClick={() => { setEditingName(false); setNewName(group?.name || ''); }}>Cancel</button>
+      <div className="section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2>Group Details</h2>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          {!editingName ? (
+            <>
+              <h2>{group?.name || 'Group'}</h2>
+              <button className="btn" onClick={() => setEditingName(true)}>Edit name</button>
+            </>
+          ) : (
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <input className="input" value={newName} onChange={e => setNewName(e.target.value)} />
+              <button className="btn primary" onClick={saveName} disabled={!newName}>Save</button>
+              <button className="btn" onClick={() => { setEditingName(false); setNewName(group?.name || ''); }}>Cancel</button>
+            </div>
+          )}
+          <div className="actions">
+            <button className="btn danger" onClick={deleteGroup} disabled={deleting}>
+              {deleting ? 'Deleting…' : 'Delete Group'}
+            </button>
           </div>
-        )}
-        <a href="#/dashboard" className="btn">Back</a>
-        <div className="actions">
-          <button className="btn danger" onClick={deleteGroup} disabled={deleting}>
-            {deleting ? 'Deleting…' : 'Delete Group'}
-          </button>
+          <button className="btn" onClick={goBackToUsers}>Back to all users</button>
         </div>
       </div>
 
