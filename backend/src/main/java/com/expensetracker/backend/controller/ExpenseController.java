@@ -273,4 +273,18 @@ public class ExpenseController {
             return ResponseEntity.status(500).build();
         }
     }
+
+    @Transactional
+    @DeleteMapping("/groups/{groupId}/expenses/{expenseId}")
+    public ResponseEntity<Void> deleteExpense(@PathVariable long groupId, @PathVariable long expenseId) {
+        try {
+            if (expenseRepo.existsById(expenseId)) {
+                expenseRepo.deleteById(expenseId);
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 }
