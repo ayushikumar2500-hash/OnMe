@@ -10,4 +10,6 @@ public class BackendApplication {
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
+	// CORS is already configured in com.expensetracker.backend.config.CorsConfig
+	// Remove duplicate bean to avoid BeanDefinitionOverrideException.
 }

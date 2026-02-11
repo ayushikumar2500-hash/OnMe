@@ -2,9 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 const API_BASE = import.meta?.env?.VITE_API_URL || 'http://localhost:8080';
 
-export default function GroupsList() {
+export default function UserView({ userId }) {
   const [groups, setGroups] = useState([]);
-  const currentUserId = Number(localStorage.getItem('currentUserId')) || null;
 
   useEffect(() => {
     (async () => {
@@ -15,20 +14,21 @@ export default function GroupsList() {
   }, []);
 
   const myGroups = useMemo(() => {
-    if (!currentUserId) return [];
-    return groups.filter(g => Array.isArray(g.memberUserIds) && g.memberUserIds.includes(currentUserId));
-  }, [groups, currentUserId]);
+    if (!userId) return [];
+    return groups.filter(g => Array.isArray(g.memberUserIds) && g.memberUserIds.includes(userId));
+  }, [groups, userId]);
 
   return (
     <section className="panel card">
-      <h2>Your Groups</h2>
+      <h2>User’s Groups</h2>
       <div className="grid">
         {myGroups.map(g => (
           <div key={g.id} className="card panel">
             <div className="section-title">
               <strong>{g.name}</strong>
-              <a href={`#/group/${g.id}`} className="btn">Open</a>
+              <a href={`#/group/${g.id}`} className="btn primary">Open</a>
             </div>
+            <p className="mt-2">Members: {g.memberUserIds?.length ?? 0}</p>
           </div>
         ))}
       </div>
